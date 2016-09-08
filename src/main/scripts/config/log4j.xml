@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="file" class="org.apache.log4j.FileAppender">
+		<param name="file" value="${jaarvis.home}/../logs/${job}_${run.date}.log" />
+		<!-- <param name="datePattern" value="'.'yyyy-MM-dd" />-->
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] %-5p %c %x - %m%n" />
+		</layout>
+	</appender>
+
+	<!-- <appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] %-5p %c %x - %m%n" />
+		</layout>
+	</appender> -->
+
+	<logger name="com.aexp">
+		<level value="debug" />
+	</logger>
+	<logger name="com.mapr.fs">
+		<level value="info" />
+	</logger>
+	<logger name="org.apache">
+		<level value="info" />
+	</logger>
+	<logger name="org.springframework">
+		<level value="info" />
+	</logger>
+
+	<!-- Restrict logs from Hive and its dependencies -->
+	<logger name="org.apache.hadoop.hive.ql.exec.MapRedTask">
+		<level value="info" />
+	</logger>
+	<!-- This will ensure Hive job progress being logged -->
+	<logger name="org.apache.hadoop.hive.ql.exec.Task">
+		<level value="info" />
+	</logger>
+	<logger name="hive.ql.parse">
+		<level value="warn" />
+	</logger>
+	<logger name="org.apache.hadoop.hive.metastore">
+		<level value="warn" />
+	</logger>
+	<logger name="org.apache.hadoop.hive.ql">
+		<level value="error" />
+	</logger>
+	<logger name="hive.log">
+		<level value="error" />
+	</logger>
+	<!-- Logs are turned off for this class to avoid unnecessary errors being 
+		printed for DROP TABLE IF EXISTS commands. -->
+	<logger name="hive.ql.metadata.Hive">
+		<level value="off" />
+	</logger>
+
+	<logger name="org.apache.zookeeper">
+		<level value="error" />
+	</logger>
+	<logger name="DataNucleus">
+		<level value="error" />
+	</logger>
+	<logger name="Datastore">
+		<level value="error" />
+	</logger>
+	<logger name="Datastore.Schema">
+		<level value="error" />
+	</logger>
+
+	<logger name="JPOX.Datastore">
+		<level value="error" />
+	</logger>
+	<logger name="JPOX.Plugin">
+		<level value="error" />
+	</logger>
+	<logger name="JPOX.MetaData">
+		<level value="error" />
+	</logger>
+	<logger name="JPOX.Query">
+		<level value="error" />
+	</logger>
+	<logger name="JPOX.General">
+		<level value="error" />
+	</logger>
+	<logger name="JPOX.Enhancer">
+		<level value="error" />
+	</logger>
+
+	<root>
+		<priority value="debug" />
+		<appender-ref ref="file" />
+	</root>
+
+</log4j:configuration>
+

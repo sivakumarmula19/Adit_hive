@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns="http://www.springframework.org/schema/batch" xmlns:b="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:aop="http://www.springframework.org/schema/aop" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.springframework.org/schema/batch	http://www.springframework.org/schema/batch/spring-batch-2.2.xsd 
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+   	<b:import resource="CommonConfig.xml" />
+   	
+    <job id="JaarvisRunJob" job-repository="jobRepository">
+     
+      <step id="createBaseTableStep" next="jaarvisStep">
+		<tasklet transaction-manager="transactionManager">
+			<b:bean parent="defaultHiveTasklet">
+				<b:property name="scriptFile" value="/home/training/Desktop/jaarvis2/jaarvis2/target/jaarvis-0.0.1-SNAPSHOT/hive/BaseTable.hql" />
+				<b:property name="params">
+					<b:set value-type="java.lang.String" merge="true">
+					</b:set>
+				</b:property>
+					<b:property name="clickstream_input" value="${jaarvis.input.CS_enterprise.path}" /> 
+							<b:property name="all_tags_input" value="/home/training/Desktop/jaarvis2/jaarvis2/target/jaarvis-0.0.1-SNAPSHOT/config/All_tags.txt" /> 
+					<b:property name="output_loaction" value="${jaarvis.output.file.path}" /> 
+					<b:property name="visit_output" value="${jaarvis.output.visit_journey.path}" /> 
+					<b:property name="hive_db_name" value="${hive.db.name}" /> 
+
+			</b:bean>
+		
+		</tasklet>
+	 </step>
+     
+     <step id="jaarvisStep" >
+		<tasklet transaction-manager="transactionManager">
+			<b:bean parent="defaultHiveTasklet">
+				<b:property name="scriptFile" value="/home/training/Desktop/jaarvis2/jaarvis2/target/jaarvis-0.0.1-SNAPSHOT/hive/jaarvis_cornerstone_code.hql" />
+				<b:property name="params">
+					<b:set value-type="java.lang.String" merge="true">
+					</b:set>
+				</b:property>
+					<b:property name="clickstream_input" value="${jaarvis.input.CS_enterprise.path}" /> 
+					<b:property name="all_tags_input" value="/home/training/Desktop/jaarvis2/jaarvis2/target/jaarvis-0.0.1-SNAPSHOT/config/All_tags.txt" /> 
+					<b:property name="output_loaction" value="${jaarvis.output.file.path}" /> 
+					<b:property name="visit_output" value="${jaarvis.output.visit_journey.path}" /> 
+					<b:property name="hive_db_name" value="${hive.db.name}" /> 
+
+			</b:bean>
+		
+		</tasklet>
+	 </step>
+ 
+   
+    </job>
+    
+    
+    <b:bean name="defaultHiveTasklet" class="com.aexp.ims.jaarvis.extract.JaarvisDynamicQueryTasklet">
+		<b:property name="tempLocation" value="${jaarvis.data.path}/processing/hivetmp" />
+		<b:property name="maxRetries" value="1" />
+		<b:property name="params">
+			<b:set value-type="java.lang.String">
+			
+				<b:value>CREATE DATABASE IF NOT EXISTS Click_Agg;</b:value>
+				<b:value>USE Click_Agg;</b:value>
+			</b:set>
+		</b:property>
+	</b:bean>
+
+</b:beans>
